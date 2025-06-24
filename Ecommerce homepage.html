@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecommerce homepage</title>
+  </head>
+  <body>
+    <script>
+      fetch("https://fakestoreapi.com/products")
+        .then((response) => response.json())
+
+        .then((data) => {
+          console.log(data);
+
+          data.forEach((element) => {
+            console.log(element);
+
+            const div01 = document.createElement("div");
+            div01.style.display = "grid";
+            div01.style.width = "400px";
+            div01.style.padding = "10px";
+            //div01.setAttribute ="padding=10px,gap=50px "
+            document.body.append(div01);
+            div01.innerHTML = element.title;
+            document.querySelector("div");
+
+            const image = document.createElement("img");
+            image.src = element.image;
+            image.width = 50;
+            image.style.padding = "10px";
+            div01.append(image);
+
+
+            const textArea = document.createElement("textarea");
+            textArea.placeholder = "0";
+            textArea.style = " width: 50px; height: 15px; placeholder";
+            textArea.required = true;
+            //element.textArea = textArea
+            div01.append(textArea);
+
+            const btnAddCart = document.createElement("button");
+            btnAddCart.innerText = "Add To Cart";
+            btnAddCart.style.width = "30%";
+
+            div01.append(btnAddCart);
+            btnAddCart.addEventListener("click", () =>
+              store.addProductToCart(element, textArea)
+            );
+          });
+          const footer = document.createElement("footer");
+          footer.style.backgroundColor = "red";
+          footer.style.display = "flex";
+          footer.style.justifyContent = "center";
+          footer.innerHTML = "Copyright " + new Date().getFullYear();
+          document.body.append(footer);
+        });
+
+      class Ecommerce {
+        constructor() {
+          this.shopCart = [];
+        }
+
+        addProductToCart = (element, textArea) => {
+         // console.log("1ºconsole"+element)//remover
+
+          const date = new Date();
+          const userId = 1;
+
+          this.shopCart.push({
+            id: element.id,
+            quantity: textArea.value,
+            date,
+            userId,
+          });
+          console.log(
+            `Produto "${element.title}" adicionado com ID ${element.id} quantidade ${textArea.value}`
+          ); //remover
+          store.updateCartApi();
+        };
+
+        getAllProducts = () => this.shopCart.map((product) => product);
+
+         updateCartApi =  () =>
+          fetch("https://fakestoreapi.com/carts/7", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "aplication/json",
+            },
+            body: JSON.stringify(this.shopCart),
+          }) 
+             .then((response) => {
+              if (!response.ok) {
+                throw new Error("Erro ao atualizar o carrinho");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Carrinho atualizado:", data);
+            })
+            .catch((error) => {
+              console.error("Erro no fetch:", error.message);
+            });
+      }
+
+      const store = new Ecommerce();
+    </script>
+  </body>
+</html>
