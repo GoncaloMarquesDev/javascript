@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>class ecomece</title>
+  </head>
+  <body>
+    <script>
+      class Ecommerce {
+        constructor() {
+          this.shopCart = [];
+        }
+
+        addProduct = (product) => {
+          this.shopCart.push(product);
+          console.log(`o artido adicionado é ${product.name}`);
+        };
+
+        shopingList = () =>
+          this.shopCart.forEach((product) =>
+            console.log(product.name, product.price)
+          );
+
+        setProduct = (productId, newPrice) => {
+          const result = this.shopCart.filter(
+            (product) => product.id === productId
+          );
+          console.log(result);
+          console.log(result.price); //remover
+          result[0].price = newPrice;
+          console.log(result); //remover
+        };
+
+        getAllProducts = () => this.shopCart.map((product) => product.name);
+
+        getAllProductsNames = () => {
+          const createNewList = this.shopCart.map((product) => product.name);
+          return createNewList.join(";");
+        };
+        getProductById = (newId) => {
+          const findId = this.shopCart.find((product) => product.id === newId);
+          return findId;
+        };
+
+        /* getProductsByPrice=(initialPrice, finalPrice)=>{ const priceInterval = this.shopCart.filter((product)=>
+         product.price >= initialPrice && product.price <= finalPrice);
+         return priceInterval;
+       
+
+
+     } */
+
+        getProductsByPrice = (initialPrice, finalPrice) =>
+          this.shopCart.filter((product) => {
+            if (product.price >= initialPrice && product.price <= finalPrice) {
+              return product;
+            }
+          });
+
+        /* addProductToCart=(name,price,id)=>this.shopCart.push({
+        name: name,
+        price: price,
+        id: id,
+     }); */
+
+        addProductToCart = (name, price) => {
+          const novoId = this.shopCart[this.shopCart.length - 1].id + 1;
+          this.shopCart.push({ name, price, id: novoId });
+          console.log(`Produto "${name}" adicionado com ID ${novoId}`);
+        };
+
+        getCartTotalPrice = () => {
+          const test = this.shopCart.map((product) => product.price);
+          console.log(test); //remover
+          const totalValueCart = test.reduce((acc, value) => acc + value, 0);
+          return totalValueCart;
+          //console.log(totalValueCart)//remover
+        };
+      }
+
+      const products01 = { name: "water", price: 1, id: 1 };
+      const products02 = { name: "wine", price: 13, id: 2 };
+      const products03 = { name: "bread", price: 5, id: 3 };
+      const products04 = { name: "ham", price: 7, id: 4 };
+
+      const store = new Ecommerce();
+      store.addProduct(products01);
+      store.addProduct(products02);
+      store.addProduct(products03);
+      store.addProduct(products04);
+    </script>
+  </body>
+</html>
